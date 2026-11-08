@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Celma — Explorador del citoesqueleto</title>
+  <meta name="description" content="Explora una célula animal en 3D, descubre relaciones entre sus estructuras y estudia el citoesqueleto con procesos, laboratorios y microscopía documentada.">
+  <meta name="theme-color" content="#d8f1ff">
+  <link rel="icon" type="image/svg+xml" href="imagenes/icono.svg">
+  <link rel="stylesheet" href="explorador.css">
+  <link rel="stylesheet" href="glass.css">
+  <link rel="stylesheet" href="celular.css">
+  <link rel="stylesheet" href="relaciones.css">
+  <link rel="stylesheet" href="laboratorio.css">
+  <link rel="stylesheet" href="microscopia.css">
+  <link rel="stylesheet" href="organelos-estudio.css">
+  <link rel="stylesheet" href="modelos-referencia.css">
+  <link rel="stylesheet" href="logros.css">
+  <link rel="stylesheet" href="sandbox.css">
+  <link rel="stylesheet" href="interfaz-sensorial.css">
+  <script src="procesos.js" defer></script>
+  <script src="escena.js" defer></script>
+  <script src="regiones-3d.js" defer></script>
+  <script src="celula-config.js" defer></script>
+  <script src="modelo-config.js" defer></script>
+  <script src="conexion-3d.js" defer></script>
+  <script src="proceso-iconos.js" defer></script>
+  <script src="explorador.js" defer></script>
+  <script src="celular-ui.js" defer></script>
+  <script src="organelos-estudio.js" defer></script>
+  <script src="modelo-referencias.js" defer></script>
+  <script src="modelos-referencia-ui.js" defer></script>
+  <script src="relaciones-celulares.js" defer></script>
+  <script src="relaciones-escena.js" defer></script>
+  <script src="relaciones-ui.js" defer></script>
+  <script src="simulacion-motor.js" defer></script>
+  <script src="simulacion-actina.js" defer></script>
+  <script src="simulacion-transporte.js" defer></script>
+  <script src="laboratorio-escena.js" defer></script>
+  <script src="laboratorio-ui.js" defer></script>
+  <script src="sandbox-config.js" defer></script>
+  <script src="logros.js" defer></script>
+  <script src="logros-ui.js" defer></script>
+  <script src="sandbox-ui.js" defer></script>
+  <script src="microscopia-config.js" defer></script>
+  <script src="microscopia-ui.js" defer></script>
+  <script src="interfaz-sensorial.js" defer></script>
+</head>
+<body>
+  <div class="cell-atmosphere" aria-hidden="true"><img src="microscopia/imagej-citoesqueleto.jpg" alt=""><img src="microscopia/hela-lamp1-vimentina.jpg" alt=""><img src="microscopia/mitocondrias-fluor.jpg" alt=""></div>
+  <a class="skip-link" href="#explorador">Saltar al explorador</a>
+  <header class="lab-header">
+    <a class="lab-brand" href="index.html" aria-label="Celma, volver al inicio">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="16" stroke="currentColor" stroke-width="1.3"/><ellipse cx="20" cy="20" rx="8" ry="16" transform="rotate(35 20 20)" stroke="currentColor" stroke-width="1.3"/><circle cx="23" cy="17" r="4" fill="currentColor"/></svg>
+      celma <span>EXPLORADOR CELULAR</span>
+    </a>
+    <nav class="glass-nav" aria-label="Navegación principal"><a href="index.html#propuesta">Sobre el proyecto</a></nav>
+  </header>
+  <main class="lab-main" id="explorador">
+    <div class="lab-intro">
+      <div><p class="overline">DE LA CÉLULA A SUS ESTRUCTURAS</p><h1><span>CITOESQUELETO</span> <em>en movimiento</em></h1></div>
+    </div>
+    <div class="workspace">
+      <aside class="process-sidebar" aria-label="Navegación de estructuras y procesos">
+        <details class="cell-catalog" open><summary>Catálogo celular <span>Recorridos 3D</span></summary><p>Selecciona una estructura y abre su recorrido para observar cómo se organiza y qué funciones realiza.</p><div id="organelle-catalog"></div></details>
+        <div class="sidebar-section"><p class="sidebar-label">01 / ESTRUCTURAS</p><div class="component-tabs" role="group" aria-label="Filtrar por estructura">
+          <button type="button" data-component="all" aria-pressed="true">Todas</button>
+          <button type="button" data-component="actin" aria-pressed="false"><i class="dot actin"></i>Actina</button>
+          <button type="button" data-component="microtubules" aria-pressed="false"><i class="dot microtubules"></i>Microtúbulos</button>
+          <button type="button" data-component="intermediate" aria-pressed="false"><i class="dot intermediate"></i>Intermedios</button>
+        </div></div>
+        <div class="sidebar-section process-section"><div class="sidebar-list-heading"><p class="sidebar-label">02 / PROCESOS</p><span id="process-count">12</span></div><div class="process-list" id="process-list"></div></div>
+        <div class="sidebar-note"><span aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z" stroke="currentColor"/></svg></span><p>Cada proceso se puede visitar de forma independiente. La brújula te devuelve al contexto celular.</p></div>
+      </aside>
+      <section class="viewer" aria-label="Visualización y explicación">
+        <div class="cell-workspace-nav" id="cell-nav" aria-label="Herramientas celulares"><button type="button" id="cell-explore" aria-pressed="true">Explorador</button></div>
+        <div class="scene-toolbar"><p id="scene-route">Célula <span>/</span> Citoesqueleto</p><div class="scene-toolbar-actions"><span class="scale-badge" id="scene-scale">Vista celular</span><div class="view-switch" role="group" aria-label="Tipo de visualización"><button id="view-2d" type="button" aria-pressed="true">Esquema 2D</button><button id="view-3d" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Ver en 3D</button></div></div></div>
+        <div class="scene-shell">
+          <canvas id="cyto-scene" role="img" aria-label="Mapa esquemático del citoesqueleto celular" aria-describedby="canvas-summary"></canvas>
+          <div class="three-canvas-host" id="three-canvas-host" aria-label="Modelo tridimensional del citoesqueleto" hidden></div>
+          <div class="three-empty" id="three-empty" hidden><svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10" stroke="currentColor" stroke-linejoin="round"/></svg><p class="three-overline">EL CITOESQUELETO EN TRES DIMENSIONES</p><h2 id="three-empty-title">Explora tu modelo desde dentro.</h2><p id="three-empty-description">Abre el modelo del citoesqueleto para girarlo, acercarte y localizar las estructuras que participan en cada proceso.</p><button class="three-primary" id="choose-model" type="button">Abrir modelo .glb</button><span id="three-load-status" role="status" aria-live="polite"></span></div>
+          <p id="canvas-summary" class="sr-only">Vista conjunta de la actina, los microtúbulos y los filamentos intermedios alrededor del núcleo. Los botones permiten explorar cada estructura.</p>
+          <div class="scene-topline"><span class="scene-label" id="scene-label">MAPA / CITOESQUELETO</span><button id="compass-toggle" class="compass-toggle" type="button" aria-expanded="false" aria-controls="compass-panel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z" stroke="currentColor"/></svg>Brújula</button></div>
+          <div class="compass-panel" id="compass-panel" hidden>
+            <div class="compass-heading"><span>¿A dónde quieres ir?</span><button id="compass-close" type="button" aria-label="Cerrar brújula">×</button></div>
+            <div class="compass-disc"><div class="compass-rings" aria-hidden="true"><span class="compass-needle" id="compass-needle"></span></div><button class="compass-destination north" data-destination="all" type="button">Célula</button><button class="compass-destination west" data-destination="actin" type="button"><i class="dot actin"></i>Actina</button><button class="compass-destination east" data-destination="microtubules" type="button"><i class="dot microtubules"></i>Microtúbulos</button><button class="compass-destination south" data-destination="intermediate" type="button"><i class="dot intermediate"></i>Intermedios</button></div>
+            <p>Un mapa de estructuras para orientarte en el recorrido.</p>
+          </div>
+          <div class="three-tools" id="three-tools" hidden><button id="model-home" type="button" aria-label="Restablecer la cámara del modelo">◎ Vista inicial</button><button id="model-focus" type="button">Enfocar estructura</button><label><input id="model-context" type="checkbox" checked>Ver contexto</label><button id="model-change" type="button">Cambiar modelo</button></div>
+          <div class="three-selection" id="three-selection" hidden><i id="three-selection-dot"></i><span id="three-selection-text"></span></div>
+          <div class="three-labels" id="three-labels" aria-hidden="true" hidden></div>
+          <div class="scene-bottomline"><span id="scene-position">Una red, tres sistemas de filamentos</span><span>ESQUEMA 2D · NO A ESCALA</span></div>
+        </div>
+        <div class="map-hotspots" id="map-hotspots" role="group" aria-label="Explorar estructuras del mapa"><button type="button" data-map-component="actin"><i class="dot actin"></i>Actina <span>→</span></button><button type="button" data-map-component="microtubules"><i class="dot microtubules"></i>Microtúbulos <span>→</span></button><button type="button" data-map-component="intermediate"><i class="dot intermediate"></i>Filamentos intermedios <span>→</span></button></div>
+        <div class="scene-legend" id="scene-legend" aria-label="Leyenda de la visualización"></div>
+        <section class="organelle-inspector" id="organelle-inspector" aria-label="Ficha introductoria del organelo" hidden>
+          <div class="organelle-heading"><div><p class="cell-kicker" id="organelle-kind">MODELO EDUCATIVO · FIBROBLASTO</p><h2 id="organelle-title">Organización celular</h2></div><span class="cell-status" id="organelle-availability">Próximamente</span></div>
+          <p id="organelle-intro"></p><div class="organelle-settings"><label><input type="checkbox" id="organelle-visible" checked> Visible</label><label for="organelle-opacity">Opacidad <input id="organelle-opacity" type="range" min="0" max="100" value="100"><output id="organelle-opacity-value">100 %</output></label><button type="button" id="organelle-focus">Acercar</button><button type="button" id="organelle-isolate" aria-pressed="false">Aislar</button><button type="button" id="cell-restore">Ver célula completa</button><a id="organelle-module" hidden>Estudiar estructura →</a></div><div class="cell-sources" id="organelle-sources"></div>
+        </section>
+        <div class="cell-model-tools"><span id="cell-model-description">Fibroblasto animal adherente · interfase · representación esquemática</span><button id="cell-model-new" type="button">Célula completa</button><button id="cell-model-previous" type="button">Modelo anterior</button></div>
+        <div id="cell-feature-panels"></div>
+        <div class="three-note" id="three-note" hidden><div><span class="three-note-label">LOCALIZA EL PROCESO</span><h3 id="three-process-title">Una vista de conjunto</h3><p id="three-process-explanation">Las estructuras identificadas en el modelo se resaltan al elegir un proceso.</p></div><span class="three-state-badge" id="three-state-badge">Modelo por abrir</span></div>
+        <p class="three-live-error" id="three-live-error" role="alert" hidden></p>
+        <p class="three-scope" id="three-scope" hidden></p>
+        <details class="model-parts" id="model-parts" hidden><summary>Ajustar zonas de referencia <span id="model-part-count"></span></summary><p id="model-part-description">Relaciona las piezas del modelo con las estructuras celulares para que el resaltado corresponda a cada proceso. También puedes pulsar una pieza en la vista 3D.</p><div class="region-editor" id="region-editor" hidden><p>Para señalar una zona, pulsa sobre su superficie en el modelo. Después elige la estructura que representa.</p><div id="region-picked" hidden><label for="region-component">Estructura de esta zona <select id="region-component"></select></label><label for="region-radius">Tamaño de la zona <input id="region-radius" type="range" min="2" max="35" value="10"><output id="region-radius-label">10 %</output></label><button class="three-primary" id="region-add" type="button">Guardar zona</button></div><div id="region-list" class="region-list"></div><p class="region-local-note">Las zonas que señales se guardan en este navegador y se iluminan al visitar sus procesos. Las etiquetas deben corresponder a las estructuras de tu modelo.</p></div><label class="model-search-label" for="model-part-search" id="model-search-wrapper">Buscar una pieza <input type="search" id="model-part-search" placeholder="Nombre de la pieza o material"></label><div id="model-picked" hidden><strong id="model-picked-name"></strong><label for="model-picked-component">Esta pieza representa <select id="model-picked-component"></select></label></div><div class="model-part-list" id="model-part-list"></div><p id="model-parts-footer"></p></details>
+        <input type="file" id="model-file" accept=".glb,model/gltf-binary" hidden>
+        <details class="quick-help" id="ayuda"><summary><span aria-hidden="true">✧</span> Ayuda rápida</summary><div class="quick-help-content"><p><strong>1. Observa.</strong> Gira y acerca el modelo para encontrar una estructura.</p><p><strong>2. Descubre.</strong> Selecciona una estructura o gira por sus relaciones.</p><p><strong>3. Experimenta.</strong> Combina componentes en el laboratorio y observa cómo cambia el sistema.</p></div></details>
+        <div class="process-controls" id="process-controls" hidden>
+          <div class="playback-row"><button id="play-button" class="play-button" type="button" aria-pressed="false">▶ Reproducir</button><button id="reset-button" class="control-button" type="button" aria-label="Reiniciar proceso">↺</button><label class="speed-label" for="speed">Velocidad <select id="speed"><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option><option value="2">2×</option></select></label><output id="time-label" for="timeline">0:00 / 0:16</output></div>
+          <label class="sr-only" for="timeline">Avance de la animación</label><input id="timeline" type="range" min="0" max="1000" value="0" step="1">
+          <div class="timeline-caption"><span>Inicio</span><span>Arrastra para observar un momento concreto</span><span>Final</span></div>
+        </div>
+        <fieldset class="critical-controls" id="critical-controls" hidden><legend>Experimenta con la actina libre</legend><div class="concentration-options" role="group" aria-label="Concentración respecto a los umbrales críticos"><button type="button" data-concentration="0" aria-pressed="false">C &lt; Cc(+)<small>Desmontaje</small></button><button type="button" data-concentration="1" aria-pressed="true">Cc(+) &lt; C &lt; Cc(−)<small>Flujo de subunidades</small></button><button type="button" data-concentration="2" aria-pressed="false">C &gt; Cc(−)<small>Crecimiento</small></button></div><p id="concentration-description">El extremo (+) crece mientras el extremo (−) pierde subunidades.</p></fieldset>
+        <article class="detail-panel" id="aprender">
+          <p class="detail-kicker" id="detail-kicker">EL PUNTO DE PARTIDA</p><div class="detail-heading"><h2 id="detail-title" tabindex="-1">Una célula. Muchas conexiones.</h2><span id="detail-number">MAPA</span></div>
+          <p class="detail-description" id="detail-description">El citoesqueleto es una red dinámica que organiza el interior celular, permite el movimiento y aporta resistencia. Visita cada sistema por separado para entender cómo se construye y qué hace.</p>
+          <div class="map-guide" id="map-guide"><div><i class="dot actin"></i><strong>Actina</strong><span>Forma, motilidad y contracción</span></div><div><i class="dot microtubules"></i><strong>Microtúbulos</strong><span>Organización y transporte</span></div><div><i class="dot intermediate"></i><strong>Intermedios</strong><span>Resistencia mecánica</span></div></div>
+          <div id="process-detail" hidden><div class="step-heading"><p class="sidebar-label">EL PROCESO, PASO A PASO</p><div><button id="previous-stage" class="step-nav" type="button" aria-label="Etapa anterior">←</button><button id="next-stage" class="step-nav" type="button" aria-label="Etapa siguiente">→</button></div></div><div class="stage-rail" id="stage-rail" role="group" aria-label="Etapas del proceso"></div><div class="stage-explanation"><span id="stage-number">01</span><div><h3 id="stage-heading"></h3><p id="stage-text"></p></div></div><div class="learning-notes"><div><span class="note-label">DÓNDE SUCEDE</span><p id="process-location"></p></div><div><span class="note-label">QUÉ RECORDAR</span><p id="process-takeaway"></p></div></div><details class="science-notes"><summary>Profundizar y consultar la fuente</summary><p id="process-notes"></p><a id="process-source" target="_blank" rel="noopener noreferrer"></a></details></div>
+        </article>
+      </section>
+    </div>
+    <p class="lab-footnote">Primera versión educativa · Diagramas simplificados de una célula animal eucariota. Las formas, distancias y tiempos son ilustrativos; no representan una simulación molecular cuantitativa.</p>
+  </main>
+  <p class="atmosphere-credits">Fotografías de ambientación: <a href="https://imagej.net/ij/images/FluorescentCells.txt" target="_blank" rel="noopener noreferrer">ImageJ · dominio público</a>, <a href="https://commons.wikimedia.org/wiki/File:HeLa_cells_showin_Lamp1_in_red,_vimentin_in_green_and_DNA_in_blue.jpg" target="_blank" rel="noopener noreferrer">GerryShaw · CC BY-SA 4.0</a> y <a href="https://commons.wikimedia.org/wiki/File:Mitochondria_in_cell.jpg" target="_blank" rel="noopener noreferrer">David Hackos / Molecular Probes · CC BY-SA 3.0</a>. Opacidad y máscara de presentación adaptadas.</p>
+  <footer class="lab-footer"><a href="index.html">celma</a><span>Mirar más cerca. Comprender mejor.</span><a href="index.html#propuesta">Sobre esta primera etapa →</a></footer>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p class="noscript">Activa JavaScript para usar las animaciones y la navegación del explorador. Puedes consultar la <a href="index.html">presentación del proyecto</a>.</p></noscript>
+</body>
+</html>
